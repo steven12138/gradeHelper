@@ -34,13 +34,15 @@ entry_usr_pwd.place(x=160, y=90)
 
 # getpath
 
+
 def callback():
     global usr_path
-    usr_path=tkinter.filedialog.askopenfile().name
+    usr_path = tkinter.filedialog.askopenfile().name
     print(usr_path)
 
-file_select=tk.Button(window,text="选择文件",command=callback)
-file_select.place(x=270,y=125)
+
+file_select = tk.Button(window, text="选择文件", command=callback)
+file_select.place(x=270, y=125)
 
 # entry_usr_path = tk.Entry(window, textvariable=var_usr_path)
 # entry_usr_path.place(x=160, y=130)
@@ -54,14 +56,14 @@ def usr_log_in():
     usr_name = var_usr_name.get()
     usr_pwd = var_usr_pwd.get()
     # usr_path = var_usr_path.get()
-    if(usr_name=="" or usr_pwd==""):
-        tkinter.messagebox.showerror("错误","用户名密码不能为空")
+    if(usr_name == "" or usr_pwd == ""):
+        tkinter.messagebox.showerror("错误", "用户名密码不能为空")
         exit()
     f = True
     window.destroy()
 
 
-bt_login = tk.Button(window, text='登录', command=usr_log_in,width=15)
+bt_login = tk.Button(window, text='登录', command=usr_log_in, width=15)
 bt_login.place(x=175, y=180)
 window.mainloop()
 
@@ -76,7 +78,7 @@ class App:
         self.label.pack()
         self.root.geometry('300x20')
         self.option = webdriver.ChromeOptions()
-        self.option.add_argument("--headless")
+        # self.option.add_argument("--headless")
         if(usr_path != ""):
             self.browser = webdriver.Chrome(
                 executable_path=usr_path, chrome_options=self.option)
@@ -95,11 +97,12 @@ class App:
         self.browser.find_element_by_css_selector(
             "#app > div.login > div > div.right > div.loginBtn > button").click()
         try:
-            self.browser.find_element_by_css_selector("#app > div.examList > div.content > div > div:nth-child(1) > div.list_right > button").click()
+            self.browser.find_element_by_css_selector(
+                "#app > div.examList > div.content > div > div:nth-child(1) > div.list_right > button").click()
         except BaseException:
-            tkinter.messagebox.showerror("发现未知错误","可能是密码错误，请重试！")
+            tkinter.messagebox.showerror("发现未知错误", "可能是密码错误，请重试！")
             exit()
-
+        self.glist = []
         self.lastnum = None
 
         self.f = 0
@@ -111,9 +114,23 @@ class App:
         tbody = self.browser.find_elements_by_css_selector(
             "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr")
         num = len(tbody)-1
+        nglist = []
+        for i in range(num):
+            title = self.browser.find_elements_by_css_selector(
+                "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr(%d)>td(1)>div" % (i+2)).text
+            grade = self.browser.find_elements_by_css_selector(
+                "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr(%d)>td(3)>div" % (i+2)).text
+            nglist.append((title, grade))
         if self.lastnum != None and num != self.lastnum:
             self.lastnum = num
-            tkinter.messagebox.showwarning('提示', '发布了新的成绩')
+            nitem=[]
+            for item in nglist:
+                if item not in self.glist:
+                    nitem.append(item)
+            sr="发布了新的成绩\n"
+            for item in nitem:
+                sr+=item[0]+"："+item[1]+"\n"
+            tkinter.messagebox.showwarning('提示', sr)
         now = time.strftime(
             "%Y-%m-%d_%H:%M:%S", time.localtime(time.time()))+" "+"当前发布科目数量："+str(num)
         self.label.configure(text=now)
