@@ -108,25 +108,25 @@ class App:
         self.lastnum = None
 
         # test
-        columns = ("课程名称", "成绩","总分")
+        columns = ("课程名称", "成绩", "总分")
         self.treeview = ttk.Treeview(
             self.root, height=0, show="headings", columns=columns)  # 表格
 
         self.treeview.column("课程名称", width=150, anchor='center')  # 表示列,不显示
-        self.treeview.column("成绩", width=50, anchor='center')
-        self.treeview.column("总分", width=50, anchor='center')
+        self.treeview.column("成绩", width=50, anchor='center',)
+        self.treeview.column("总分", width=50, anchor='center',)
 
         self.treeview.heading("课程名称", text="课程名称")  # 显示表头
         self.treeview.heading("成绩", text="成绩")
         self.treeview.heading("总分", text="总分")
 
-        self.treeview.pack(side=LEFT, fill=BOTH)
+        self.treeview.pack(side=LEFT)
         self.treeview.place(x=22.5, y=25)
         # name = ['电脑1','服务器','笔记本']
         # ipcode = ['10.13.71.223','10.25.61.186','10.25.11.163']
         # for i in range(min(len(name),len(ipcode))): # 写入数据
         #     treeview.insert('', i, values=(name[i], ipcode[i]))
-
+        self.fa=True
         self.f = 0
         self.update_clock()
         self.root.mainloop()
@@ -139,27 +139,43 @@ class App:
         nglist = []
         titlelist = []
         gradelist = []
-        totlist=[]
+        totlist = []
         for i in range(num):
             # print("#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(1)>div" % (i+2))
             title = self.browser.find_element_by_css_selector(
                 "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(1)>div" % (i+2)).text
             grade = self.browser.find_element_by_css_selector(
                 "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(3)>div" % (i+2)).text
-            tot=self.browser.find_element_by_css_selector(
+            tot = self.browser.find_element_by_css_selector(
                 "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(2)>div" % (i+2)).text
             nglist.append((title, grade))
             titlelist.append(title)
             gradelist.append(grade)
             totlist.append(tot)
 
-        x = self.treeview.get_children()
-        for item in x:
-            self.treeview.delete(item)
-        self.treeview.configure(height=num)
-        self.root.geometry('300x%d'%(50+num*21+5))
+        del self.treeview
+        columns = ("课程名称", "成绩", "总分")
+        self.treeview = ttk.Treeview(
+            self.root, height=0, show="headings", columns=columns)  # 表格
+
+        self.treeview.column("课程名称", width=150, anchor='center')  # 表示列,不显示
+        self.treeview.column("成绩", width=50, anchor='center',)
+        self.treeview.column("总分", width=50, anchor='center',)
+
+        self.treeview.heading("课程名称", text="课程名称")  # 显示表头
+        self.treeview.heading("成绩", text="成绩")
+        self.treeview.heading("总分", text="总分")
+
+        self.treeview.pack(side=LEFT)
+        self.treeview.place(x=22.5, y=25)
+
+        if self.lastnum!=num:
+            self.treeview.configure(height=num)
+            self.root.geometry('300x%d' % (50+num*21+5))
         for i in range(num):  # 写入数据
-            self.treeview.insert('', i, values=(titlelist[i], gradelist[i],totlist[i]))
+            self.treeview.insert('', i, values=(
+                titlelist[i], gradelist[i], totlist[i]))
+        self.treeview.update()
 
         if self.lastnum != None and num != self.lastnum:
             self.lastnum = num
