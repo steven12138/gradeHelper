@@ -78,7 +78,7 @@ class App:
         self.label.pack()
         self.root.geometry('300x20')
         self.option = webdriver.ChromeOptions()
-        # self.option.add_argument("--headless")
+        self.option.add_argument("--headless")
         if(usr_path != ""):
             self.browser = webdriver.Chrome(
                 executable_path=usr_path, chrome_options=self.option)
