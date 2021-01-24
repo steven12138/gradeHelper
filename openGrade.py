@@ -116,11 +116,11 @@ class App:
         num = len(tbody)-1
         nglist = []
         for i in range(num):
-            title = self.browser.find_elements_by_css_selector(
-                "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr(%d)>td(1)>div" % (i+2)).text
-            grade = self.browser.find_elements_by_css_selector(
-                "#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr(%d)>td(3)>div" % (i+2)).text
+            # print("#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(1)>div" % (i+2))
+            title = self.browser.find_element_by_css_selector("#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(1)>div" % (i+2)).text
+            grade = self.browser.find_element_by_css_selector("#pane--1 > div > div:nth-child(1) > div.allCourseStatistics > div.el-table.el-table--fit.el-table--border.el-table--scrollable-x.el-table--enable-row-hover.el-table--enable-row-transition.el-table--small > div.el-table__body-wrapper.is-scrolling-left > table > tbody>tr:nth-child(%d)>td:nth-child(3)>div" % (i+2)).text
             nglist.append((title, grade))
+        print(nglist)
         if self.lastnum != None and num != self.lastnum:
             self.lastnum = num
             nitem=[]
