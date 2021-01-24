@@ -121,7 +121,7 @@ class App:
         self.treeview.heading("总分", text="总分")
 
         self.treeview.pack(side=LEFT, fill=BOTH)
-        self.treeview.place(x=25, y=25)
+        self.treeview.place(x=22.5, y=25)
         # name = ['电脑1','服务器','笔记本']
         # ipcode = ['10.13.71.223','10.25.61.186','10.25.11.163']
         # for i in range(min(len(name),len(ipcode))): # 写入数据
