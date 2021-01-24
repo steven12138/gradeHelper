@@ -9,4 +9,5 @@ you need
 ```
 ## notice
 
-if you already put chromedriver.exe into the ```PATH```, you won't need to select the file again
+1. if you already put chromedriver.exe into the ```PATH```, you won't need to select the file again
+2. To Downlaod ChromeDriver, click [Here](http://npm.taobao.org/mirrors/chromedriver)
